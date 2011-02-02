@@ -1,6 +1,3 @@
-require 'sunspot'
-require 'sunspot/rails/searchable'
-
 module Sunspot
   module MassiveRecord
     extend ActiveSupport::Concern
@@ -29,4 +26,8 @@ module Sunspot
       end
     end
   end
+end
+
+MassiveRecord::ORM::Base.class_eval do
+  include Sunspot::MassiveRecord
 end
