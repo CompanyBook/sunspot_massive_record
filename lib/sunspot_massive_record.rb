@@ -1,3 +1,1 @@
-module SunspotMassiveRecord
-  # Your code goes here...
-end
+require 'sunspot/massive_record'
