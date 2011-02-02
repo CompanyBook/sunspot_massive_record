@@ -1,0 +1,3 @@
+module SunspotMassiveRecord
+  # Your code goes here...
+end
