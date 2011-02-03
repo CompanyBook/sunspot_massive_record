@@ -14,11 +14,11 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "sunspot_massive_record"
 
-  s.add_dependency "massive_record", ">= 0.0.1"
+  s.add_dependency "rails"
+  s.add_dependency "massive_record"
   s.add_dependency "sunspot_rails"
-  s.add_dependency "activesupport"
 
-  s.add_development_dependency "rspec", ">= 2.1.0"
+  s.add_development_dependency "rspec"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

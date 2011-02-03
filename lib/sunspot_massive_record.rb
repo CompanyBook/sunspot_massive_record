@@ -1,3 +1,7 @@
+require 'active_support'
+require 'massive_record'
+require 'rails'
+
 require 'sunspot'
 require 'sunspot/rails'
 require 'sunspot/massive_record'
