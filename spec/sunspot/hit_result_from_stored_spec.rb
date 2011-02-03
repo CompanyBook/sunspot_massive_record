@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Sunspot::Search::AbstractSearch do
+describe "results from stored attributes" do
   include MassiveRecord::Rspec::SimpleDatabaseCleaner
 
   before do
@@ -14,28 +14,69 @@ describe Sunspot::Search::AbstractSearch do
     Sunspot.remove_all PersonSearchable
   end
 
+
+
+
   it "should be indexed" do
     @search.results.first.should == @person
   end
 
 
-  describe "#results_attributes_from_index" do
-    before do
-      @person_from_stored_attributes = @search.results_from_stored_attributes.first
-      @person_from_stored_attributes
-    end
 
-    it "should not hit the database" do
-      PersonSearchable.should_not_receive :find
-      @search.results_from_stored_attributes
-    end
 
-    it "should be considered equal to what is in the database" do
-      @person_from_stored_attributes.should == @person
-    end
 
-    it "should return read only results" do
-      @person_from_stored_attributes.should be_readonly
+  describe Sunspot::Search::AbstractSearch do
+    describe "#results_attributes_from_index" do
+      before do
+        @person_from_stored_attributes = @search.results_from_stored_attributes.first
+        @person_from_stored_attributes
+      end
+
+      it "should not hit the database" do
+        PersonSearchable.should_not_receive :find
+        @search.results_from_stored_attributes
+      end
+
+      it "should be considered equal to what is in the database" do
+        @person_from_stored_attributes.should == @person
+      end
+
+      it "should return read only results" do
+        @person_from_stored_attributes.should be_readonly
+      end
+
+      it "should insert created object in hit" do
+        @search.hits.first.result_from_stored_attributes.should == @person_from_stored_attributes
+      end
+    end
+  end
+
+
+
+  describe Sunspot::Search::Hit do
+    describe "#result_from_stored_attributes" do
+      before do
+        @hit = @search.hits.first
+      end
+
+      it "should not hit the database" do
+        PersonSearchable.should_not_receive :find
+        @hit.result_from_stored_attributes
+      end
+
+      it "should ask the search for results_attributes_from_index" do
+        @search.should_receive :results_from_stored_attributes
+        @hit.result_from_stored_attributes
+      end
+
+      it "should be considered equal to what is in the database" do
+        @hit.result_from_stored_attributes.should == @person
+      end
+
+      it "should return read only results" do
+        @hit.result_from_stored_attributes.should be_readonly
+      end
     end
   end
 end
+
