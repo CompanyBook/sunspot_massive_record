@@ -6,7 +6,7 @@ module SunspotMassiveRecord
       end
 
       rake_tasks do
-        load 'sunspot/rails/tasks.rb'
+        load 'sunspot_massive_record/rails/tasks.rb'
       end
     end
   end
