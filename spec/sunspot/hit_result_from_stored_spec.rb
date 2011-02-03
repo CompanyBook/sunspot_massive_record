@@ -48,6 +48,12 @@ describe "results from stored attributes" do
       it "should insert created object in hit" do
         @search.hits.first.result_from_stored_attributes.should == @person_from_stored_attributes
       end
+
+      %w(name free_text age).each do |attr_name|
+        it "should have #{attr_name} equal to object in database" do
+          @person_from_stored_attributes.send(attr_name).should == @person.send(attr_name)
+        end
+      end
     end
   end
 
@@ -75,6 +81,12 @@ describe "results from stored attributes" do
 
       it "should return read only results" do
         @hit.result_from_stored_attributes.should be_readonly
+      end
+
+      %w(name free_text age).each do |attr_name|
+        it "should have #{attr_name} equal to object in database" do
+          @hit.result_from_stored_attributes.send(attr_name).should == @person.send(attr_name)
+        end
       end
     end
   end
