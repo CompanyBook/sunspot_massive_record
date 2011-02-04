@@ -1,0 +1,8 @@
+hbase:
+  host: 127.0.0.1
+  port: 9090
+
+solr:
+  hostname: 127.0.0.1
+  port: 8982
+  log_level: INFO
