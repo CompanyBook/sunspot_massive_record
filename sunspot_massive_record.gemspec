@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.rubyforge_project = "sunspot_massive_record"
 
   s.add_dependency "rails"
-  s.add_dependency "massive_record"
+  s.add_dependency "massive_record", ">= 0.1.1"
   s.add_dependency "sunspot_rails"
 
   s.add_development_dependency "rspec"
