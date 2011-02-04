@@ -26,7 +26,7 @@ describe "results from stored attributes" do
 
 
   describe Sunspot::Search::AbstractSearch do
-    describe "#results_attributes_from_index" do
+    describe "#results_from_stored_attributes" do
       before do
         @person_from_stored_attributes = @search.results_from_stored_attributes.first
         @person_from_stored_attributes
@@ -93,6 +93,12 @@ describe "results from stored attributes" do
         it "should have #{attr_name} equal to object in database" do
           @hit.result_from_stored_attributes.send(attr_name).should == @person.send(attr_name)
         end
+      end
+    end
+
+    describe "#instance_from_stored_attributes" do
+      it "should return the same as result_from_stored_attributes" do
+        @search.hits.first.instance_from_stored_attributes.should == @search.hits.first.result_from_stored_attributes
       end
     end
   end

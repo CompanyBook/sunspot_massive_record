@@ -25,8 +25,11 @@ module Sunspot
       private
 
 
-
-      def stored_attributes_from_hit(hit)
+      #
+      # Returns hash with attributes to be used to build a MassiveRecord ORM
+      # object with.
+      #
+      def stored_attributes_from_hit(hit) # :nodoc:
         Hash[hit.class_name.constantize.known_attribute_names.collect do |attribute_name|
           stored_value = hit.stored(attribute_name)
           stored_value = stored_value.first if stored_value.is_a? Array
@@ -38,14 +41,24 @@ module Sunspot
       end
     end
 
+
+
+
+
+
     class Hit
       attr_writer :result_from_stored_attributes
 
+      #
+      # Returns the result from the hit populated with attributes
+      # from stored values.
+      #
       def result_from_stored_attributes
         return @result_from_stored_attributes if @result_from_stored_attributes
         @search.results_from_stored_attributes
         @result_from_stored_attributes
       end
+      alias_method :instance_from_stored_attributes, :result_from_stored_attributes
     end
   end
 end
