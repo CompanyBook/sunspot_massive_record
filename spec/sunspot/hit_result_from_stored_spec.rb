@@ -50,8 +50,7 @@ describe "results from stored attributes" do
 
       it "should only build objects once" do
         @search = PersonSearchable.search { |s| s.keywords(@person.free_text) }
-        hits = @search.hits
-        @search.should_receive(:hits).once.and_return(hits)
+        @search.should_receive(:populate_hits_from_stored_attributes).once
         2.times { @search.results_from_stored_attributes }
       end
 
@@ -59,6 +58,14 @@ describe "results from stored attributes" do
         it "should have #{attr_name} equal to object in database" do
           @person_from_stored_attributes.send(attr_name).should == @person.send(attr_name)
         end
+      end
+
+      it "should check if will paginate should be used" do
+        @search = PersonSearchable.search { |s| s.keywords(@person.free_text) }
+        hits = @search.hits
+        @search.stub(:hits).and_return(hits)
+        @search.should_receive(:maybe_will_paginate)
+        @search.results_from_stored_attributes
       end
     end
   end
@@ -77,7 +84,7 @@ describe "results from stored attributes" do
       end
 
       it "should ask the search for results_attributes_from_index" do
-        @search.should_receive(:results_from_stored_attributes)
+        @search.should_receive(:populate_hits_from_stored_attributes)
         @hit.result_from_stored_attributes
       end
 

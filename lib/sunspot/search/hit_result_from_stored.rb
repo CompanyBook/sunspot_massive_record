@@ -11,20 +11,22 @@ module Sunspot
       # something and you don't want to hit the database.
       #
       def results_from_stored_attributes
-        @results_from_stored_attributes ||=
-          hits.collect do |hit|
-            record = hit.class_name.constantize.allocate.tap do |record|
-              record.init_with('attributes' => stored_attributes_from_hit(hit))
-              record.readonly!
-            end
-
-            hit.result_from_stored_attributes = record
-          end
+        return @results_from_stored_attributes if @results_from_stored_attributes
+        @results_from_stored_attributes = maybe_will_paginate(hits.collect(&:result_from_stored_attributes))
       end
 
+      def populate_hits_from_stored_attributes
+        hits.each do |hit|
+          record = hit.class_name.constantize.allocate.tap do |record|
+            record.init_with('attributes' => stored_attributes_from_hit(hit))
+            record.readonly!
+          end
+
+          hit.result_from_stored_attributes = record
+        end
+      end
 
       private
-
 
       #
       # Returns hash with attributes to be used to build a MassiveRecord ORM
@@ -56,7 +58,7 @@ module Sunspot
       #
       def result_from_stored_attributes
         return @result_from_stored_attributes if @result_from_stored_attributes
-        @search.results_from_stored_attributes
+        @search.populate_hits_from_stored_attributes
         @result_from_stored_attributes
       end
       alias_method :instance_from_stored_attributes, :result_from_stored_attributes
