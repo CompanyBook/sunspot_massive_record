@@ -71,8 +71,14 @@ describe "results from stored attributes" do
       end
 
       it "should ask the search for results_attributes_from_index" do
-        @search.should_receive :results_from_stored_attributes
+        @search.should_receive(:results_from_stored_attributes)
         @hit.result_from_stored_attributes
+      end
+
+      it "should only ask search for results_from_stored_attributes once" do
+        hits = @search.hits
+        @search.should_receive(:hits).once.and_return(hits)
+        2.times { @hit.result_from_stored_attributes }
       end
 
       it "should be considered equal to what is in the database" do

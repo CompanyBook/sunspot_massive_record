@@ -42,6 +42,7 @@ module Sunspot
       attr_writer :result_from_stored_attributes
 
       def result_from_stored_attributes
+        return @result_from_stored_attributes if @result_from_stored_attributes
         @search.results_from_stored_attributes
         @result_from_stored_attributes
       end
