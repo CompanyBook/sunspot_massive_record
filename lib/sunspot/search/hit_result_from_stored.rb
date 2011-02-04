@@ -11,14 +11,15 @@ module Sunspot
       # something and you don't want to hit the database.
       #
       def results_from_stored_attributes
-        hits.collect do |hit|
-          record = hit.class_name.constantize.allocate.tap do |record|
-            record.init_with('attributes' => stored_attributes_from_hit(hit))
-            record.readonly!
-          end
+        @results_from_stored_attributes ||=
+          hits.collect do |hit|
+            record = hit.class_name.constantize.allocate.tap do |record|
+              record.init_with('attributes' => stored_attributes_from_hit(hit))
+              record.readonly!
+            end
 
-          hit.result_from_stored_attributes = record
-        end
+            hit.result_from_stored_attributes = record
+          end
       end
 
 

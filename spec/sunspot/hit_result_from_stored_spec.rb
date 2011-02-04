@@ -29,7 +29,6 @@ describe "results from stored attributes" do
     describe "#results_from_stored_attributes" do
       before do
         @person_from_stored_attributes = @search.results_from_stored_attributes.first
-        @person_from_stored_attributes
       end
 
       it "should not hit the database" do
@@ -47,6 +46,13 @@ describe "results from stored attributes" do
 
       it "should insert created object in hit" do
         @search.hits.first.result_from_stored_attributes.should == @person_from_stored_attributes
+      end
+
+      it "should only build objects once" do
+        @search = PersonSearchable.search { |s| s.keywords(@person.free_text) }
+        hits = @search.hits
+        @search.should_receive(:hits).once.and_return(hits)
+        2.times { @search.results_from_stored_attributes }
       end
 
       %w(name free_text age).each do |attr_name|
