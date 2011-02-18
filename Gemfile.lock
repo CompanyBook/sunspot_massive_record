@@ -102,5 +102,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  massive_record (>= 0.1.1)
+  rails
   rspec
   sunspot_massive_record!
+  sunspot_rails

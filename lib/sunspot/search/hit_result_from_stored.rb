@@ -33,7 +33,10 @@ module Sunspot
       # object with.
       #
       def stored_attributes_from_hit(hit) # :nodoc:
-        Hash[hit.class_name.constantize.known_attribute_names.collect do |attribute_name|
+        fields = @setup.fields.select{|f| f.instance_variable_get("@stored")}.collect(&:name)
+        all_text_fields = @setup.all_text_fields.select{|f| f.instance_variable_get("@stored")}.collect(&:name)
+        
+        Hash[(fields | all_text_fields).collect do |attribute_name|
           stored_value = hit.stored(attribute_name)
           stored_value = stored_value.first if stored_value.is_a? Array
 
